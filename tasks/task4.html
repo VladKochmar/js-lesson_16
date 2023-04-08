@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ukr">
+
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="../css/style.css">
+   <title>Завдання 4</title>
+</head>
+
+<body>
+   <main class="page">
+      <section class="block">
+         <div class="block__container">
+            <h1 class="block__title">Додаткове завдання 4</h1>
+            <div class="block__body">
+               <a href="../index.html" class="block__link">Повернутися до index.html</a>
+            </div>
+         </div>
+      </section>
+   </main>
+   <script>
+      // Створити клас TBankomat, який моделює роботу банкомата. 
+      // Клас повинен містити поля для зберігання кількості купюр кожного із номіналів від 5 до 200 гривень.
+      // Реалізувати методи знаходження максимальної та мінімальної сум, 
+      // які може видати банкомат, та метод зняття деякої суми.
+
+      class Banknote {
+         #par
+         #quantity
+
+         constructor(par, quantity) {
+            this.par = par
+            this.quantity = quantity
+         }
+
+         // -------Гетери-------
+         get par() {
+            return this.#par
+         }
+
+         get quantity() {
+            return this.#quantity
+         }
+         // -------Сетери-------
+         set par(newPar) {
+            if (newPar !== 5 && newPar !== 10 && newPar !== 20 && newPar !== 50 && newPar !== 100 && newPar !== 200)
+               throw new Error('Неіснуючий номінал')
+            this.#par = newPar
+         }
+
+         set quantity(newQuantity) {
+            if (newQuantity < 0)
+               throw new Error('Неможлива кількість грошей')
+            this.#quantity = newQuantity
+         }
+
+         toString() {
+            return `Номінал: ${this.par} Кількість купюр: ${this.quantity} <br>`
+         }
+      }
+
+      class TBankomat {
+         #banknoteList
+
+         constructor(banknoteList) {
+            this.banknoteList = banknoteList
+         }
+
+         get banknoteList() {
+            return this.#banknoteList
+         }
+
+         set banknoteList(newList) {
+            if (!Array.isArray(newList))
+               throw new Error('Некоректні дані')
+            this.#banknoteList = newList
+         }
+
+         // -------Методи-------
+         get minPayment() {
+            const minPay = this.banknoteList.reduce((prevMin, elem) => (elem.par < prevMin.par && elem.quantity > 0) ? elem : prevMin).par
+            return minPay !== undefined ? minPay : 0
+         }
+
+         get maxPayment() {
+            let maxPay = 0
+            for (const banknote of this.banknoteList) {
+               maxPay += banknote.quantity * banknote.par
+            }
+            return maxPay
+         }
+
+         withdrawalAmount(amount) {
+            const minPayment = this.minPayment
+            if (amount > this.maxPayment)
+               throw new Error('В банкоматі нема такої суми')
+
+            if (amount % minPayment !== 0 && amount < minPayment)
+               throw new Error(`Сума не кратна ${minPayment}`)
+
+            let remainingAmount = amount
+            this.banknoteList.sort((el1, el2) => el2.par - el1.par)
+
+            for (const banknote of this.banknoteList) {
+               if (remainingAmount > 0) {
+                  const banknotesNum = Math.min(Math.floor(remainingAmount / banknote.par), banknote.quantity)
+                  banknote.quantity -= banknotesNum
+                  remainingAmount -= banknote.par * banknotesNum
+               } else
+                  break
+            }
+         }
+
+         toString() {
+            return `${this.banknoteList}`
+         }
+      }
+
+      const myBankomat = new TBankomat([
+         new Banknote(5, 20),
+         new Banknote(10, 50),
+         new Banknote(20, 100),
+         new Banknote(50, 134),
+         new Banknote(100, 200),
+         new Banknote(200, 174),
+      ])
+
+      document.write(`
+         <div class="text">До зняття коштів</div>
+         <div class="text">Мінімальна сума: ${myBankomat.minPayment} грн</div>
+         <div class="text">Максимальна сума до зняття 1000грн: ${myBankomat.maxPayment} грн</div>
+         <div class="text">Баланс банкомату: <br> ${myBankomat}</div>
+         <br>
+      `)
+
+      myBankomat.withdrawalAmount(17500)
+
+      document.write(`
+         <div class="text">Після зняття коштів (17500грн)</div>
+         <div class="text">Мінімальна сума: ${myBankomat.minPayment} грн</div>
+         <div class="text">Максимальна сума до зняття 1000грн: ${myBankomat.maxPayment} грн</div>
+         <div class="text">Баланс банкомату: <br> ${myBankomat}</div>
+      `)
+   </script>
+</body>
+
+</html>

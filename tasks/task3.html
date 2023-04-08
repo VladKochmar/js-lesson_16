@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ukr">
+
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="../css/style.css">
+   <title>Завдання 3</title>
+</head>
+
+<body>
+   <main class="page">
+      <section class="block">
+         <div class="block__container">
+            <h1 class="block__title">Додаткове завдання 3</h1>
+            <div class="block__body">
+               <a href="../index.html" class="block__link">Повернутися до index.html</a>
+            </div>
+         </div>
+      </section>
+   </main>
+   <script>
+      // -------Поля(властивості)-------
+      // назва фірми
+      // дата заснування
+      //  - рік, 
+      //  - місяць
+      // послуги 
+      //  - назва послуги, 
+      //  - вартість, 
+      //  - термін виконання
+      //  адреси філіалів 
+      //  - країна, 
+      //  - місто, 
+      //  - вулиця, 
+      //  - номер будинку
+      // -------Методи (дії)-------
+      // визначення кількості років існування фірми
+      // виведення всіх філіалів фірми у вказаному місті
+      // виведення на екран послуг, що можуть бути виконані за вказану суму грошей та вказаний термін часу
+
+      class DateFirm {
+         #year
+         #month
+
+         constructor(year, month) {
+            this.year = year
+            this.month = month
+         }
+
+         get year() {
+            return this.#year
+         }
+
+         get month() {
+            return this.#month
+         }
+
+         set year(newYear) {
+            if (newYear <= 0)
+               throw new Error('Неможливий рік')
+            this.#year = newYear
+         }
+
+         set month(newMont) {
+            if (newMont < 1 || newMont > 12)
+               throw new Error('Неможливий місяць')
+            this.#month = newMont
+         }
+
+         static decreaseDate(date1, date2) {
+            return date1.year - date2.year + Math.floor((date1.month - date2.month) / 12)
+         }
+
+         toString() {
+            return `${this.month} місяць ${this.year} рік`
+         }
+      }
+
+      // послуги 
+      //  - назва послуги, 
+      //  - вартість, 
+      //  - термін виконання
+      class Service {
+         #name
+         #price
+         #deadline
+
+         constructor(name, price, deadline) {
+            this.name = name
+            this.price = price
+            this.deadline = deadline
+         }
+
+         get name() {
+            return this.#name
+         }
+
+         get price() {
+            return this.#price
+         }
+
+         get deadline() {
+            return this.#deadline
+         }
+
+         set name(newName) {
+            if (newName.length === 0)
+               throw new Error('Неможлива назва')
+            this.#name = newName
+         }
+
+         set price(newPrice) {
+            if (newPrice < 0)
+               throw new Error('Неможлива ціна')
+            this.#price = newPrice
+         }
+
+         set deadline(newDeadline) {
+            if (newDeadline.length === 0)
+               throw new Error('Неможливий строк')
+            this.#deadline = newDeadline
+         }
+
+         toString() {
+            return `Послуга: ${this.name} Ціна: ${this.price} Термін виконання: ${this.#deadline}`
+         }
+      }
+
+      //  адреси філіалів 
+      //  - країна, 
+      //  - місто, 
+      //  - вулиця, 
+      //  - номер будинку
+
+
+      class Addresse {
+         #country
+         #city
+         #street
+         #num
+
+         constructor(country, city, street, num) {
+            this.country = country
+            this.city = city
+            this.street = street
+            this.num = num
+         }
+
+         get country() {
+            return this.#country
+         }
+
+         get city() {
+            return this.#city
+         }
+
+         get street() {
+            return this.#street
+         }
+
+         get num() {
+            return this.#num
+         }
+
+         set country(newCountry) {
+            if (newCountry.length === 0)
+               throw new Error('Неможлива назва країни')
+            this.#country = newCountry
+         }
+
+         set city(newCity) {
+            if (newCity.length === 0)
+               throw new Error('Неможлива назва міста')
+            this.#city = newCity
+         }
+
+         set street(newStreet) {
+            if (newStreet.length === 0)
+               throw new Error('Неможлива назва вулиці')
+            this.#street = newStreet
+         }
+
+         set num(newNum) {
+            if (newNum.length === 0)
+               throw new Error('Неможливий номер')
+            this.#num = newNum
+         }
+
+         toString() {
+            return `Країна: ${this.country} Місто: ${this.city} Вулиця: ${this.street} Номер будинку: ${this.num}`
+         }
+      }
+
+      class Firm {
+         #title
+         #foundingDate
+         #services
+         #addresses
+
+         constructor(title, foundingDate, servicesList, addressesList) {
+            this.Title = title
+            this.FoundingDate = foundingDate
+            this.Services = servicesList
+            this.Addresses = addressesList
+         }
+
+         // -------Гетери-------
+
+         get Title() {
+            return this.#title
+         }
+
+         get FoundingDate() {
+            return this.#foundingDate
+         }
+
+         get Services() {
+            return this.#services
+         }
+
+         get Addresses() {
+            return this.#addresses
+         }
+
+         // -------Сетери-------
+
+         set Title(newTitle) {
+            if (newTitle.length === 0)
+               throw new Error('Недопустиме ім\'я')
+            this.#title = newTitle
+         }
+
+         set FoundingDate(newDate) {
+            if (typeof newDate !== 'object' || newDate === null)
+               throw new Error('Недопустиме значення')
+            this.#foundingDate = newDate
+         }
+
+         set Services(newServices) {
+            if (!Array.isArray(newServices))
+               throw new Error('Недопустиме значення')
+            this.#services = newServices
+         }
+
+         set Addresses(newAddress) {
+            if (!Array.isArray(newAddress))
+               throw new Error('Недопустиме значення')
+            this.#addresses = newAddress
+         }
+
+         // -------Методи-------
+
+         // визначення кількості років існування фірми
+         get firmYears() {
+            return DateFirm.decreaseDate({ year: 2023, month: 4 }, this.FoundingDate)
+         }
+
+         // виведення всіх філіалів фірми у вказаному місті
+         showSelectedCityBranches(city) {
+            for (const branch of this.Addresses) {
+               if (branch.city === city) {
+                  document.write(`${branch} <br>`)
+               }
+            }
+         }
+
+         // виведення на екран послуг, що можуть бути виконані за вказану суму грошей та вказаний термін часу
+         findServicesByPriceAndDeadline(price, deadline) {
+            for (const service of this.Services) {
+               if (service.price <= price && service.deadline.toLowerCase() === deadline.toLowerCase()) {
+                  document.write(`${service} <br>`)
+               }
+            }
+         }
+
+         toString() {
+            return `${this.Title} ${this.FoundingDate} ${this.Services} ${this.Addresses}`
+         }
+      }
+
+      const foundingDate = new DateFirm(2019, 4)
+
+      const servicesList = [
+         new Service('Service 1', 195, 'Один день'),
+         new Service('Service 2', 35, 'Один день'),
+         new Service('Service 3', 47, 'Три години'),
+         new Service('Service 4', 374, 'Одна година'),
+         new Service('Service 5', 35, 'Тиждень'),
+         new Service('Service 6', 52, 'Два дні'),
+         new Service('Service 7', 35, 'Тиждень'),
+         new Service('Service 8', 32, 'Три години'),
+      ]
+
+      const addressesList = [
+         new Addresse('USA', 'New York', 'Main Street', '2-A'),
+         new Addresse('Ukraine', 'Mykolaiv', 'Shevchenka', '64В'),
+         new Addresse('Ukraine', 'Mykolaiv', 'Mury', '11'),
+         new Addresse('Ukraine', 'Kyiv', 'Tarasa Shevchenka', '1'),
+      ]
+
+      const myFirm = new Firm('My Firm', foundingDate, servicesList, addressesList)
+
+      const firmYears = myFirm.firmYears
+
+      myFirm.showSelectedCityBranches('Mykolaiv')
+      myFirm.findServicesByPriceAndDeadline(195, 'Один день')
+
+      document.write(`<div class="text">Вік фірми: ${firmYears}</div>`)
+   </script>
+</body>
+
+</html>
